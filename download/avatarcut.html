@@ -2,48 +2,141 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cutting Room For UBCAvatar</title>
+    <title>Cutting Room For UB Avatar</title>
     <link href="https://cdn.bootcss.com/cropper/3.1.3/cropper.min.css" rel="stylesheet">
     <style>
-        <!-- #photo { max-width: 100% } -->
-        .img-preview { width: 100px; height: 100px; overflow: hidden }
-        #selectImg { width: 500px; height: 500px }
+        .img-preview { width: 500px; height: 500px; overflow: hidden }
+        #selectImg { width: 500px; height: 500px; overflow: auto}
+        body {
+            background: #e0e5ec;
+          }
+          h1 {
+            position: relative;
+            text-align: center;
+            color: #353535;
+            font-size: 50px;
+            font-family: "Cormorant Garamond", serif;
+          }
+          
+          p {
+            font-family: 'Lato', sans-serif;
+            font-weight: 300;
+            text-align: center;
+            font-size: 18px;
+            color: #676767;
+          }
+          .frame {
+            width: 90%;
+            margin: 40px auto;
+            text-align: center;
+            border: 1px dashed #000;
+            display: table-cell;
+            vertical-align: middle;
+          }
+          button {
+            margin: 20px;
+          }
+          .custom-btn {
+            width: 130px;
+            height: 40px;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+             box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+             7px 7px 20px 0px rgba(0,0,0,.1),
+             4px 4px 5px 0px rgba(0,0,0,.1);
+            outline: none;
+          }
+          /* 16 */
+          .btn-16 {
+            border: none;
+            color: #000;
+          }
+          .btn-16:after {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 100%;
+            top: 0;
+            left: 0;
+            direction: rtl;
+            z-index: -1;
+            box-shadow:
+             -7px -7px 20px 0px #fff9,
+             -4px -4px 5px 0px #fff9,
+             7px 7px 20px 0px #0002,
+             4px 4px 5px 0px #0001;
+            transition: all 0.3s ease;
+          }
+          .btn-16:hover {
+            color: #000;
+          }
+          .btn-16:hover:after {
+            left: auto;
+            right: 0;
+            width: 100%;
+          }
+          .btn-16:active {
+            top: 2px;
+          }
+          .textarea_color {
+            border-radius: 5px;
+            padding: 10px 25px;
+            display: inline-block;
+            outline: none;
+            direction: rtl;
+          }
     </style>
 </head>
 <body>
-<form id="form">
+<div id = "form" class="frame">
     <!--表单部分-->
     <div>
         <span>
+            <h1>cutting result</h1>
             <img src="" alt="裁剪结果" id="selectImg" style="display: none">
             <input type="file" id="imgInp" class="sr-only" style="display: none">
-            <button type="button" class="pictureUrl" onclick="$('#imgInp').click()" id="uploadImg">choose</button>
-            <p><button class="btn btn-success" onclick="download()">download</button></p>
+            <button class="custom-btn btn-16" type="button" class="pictureUrl" onclick="$('#imgInp').click()" id="uploadImg">choose</button>
+            <button class="custom-btn btn-16" onclick="download()">download</button>
+            <button class="custom-btn btn-16" onclick="copyandshow()" id="btnCopy">showCodeAndCopy</button>
         </span>
     </div>
-</form>
+</div>
 
-<div id="cropperBox">
+<div id="cropperBox" class="frame">
     <!--裁剪部分-->
     <div>
         <img src="" id="photo">
     </div>
     <!--预览-->
-    <div class="img-preview"></div>
-    <p><button class="btn btn-success" onclick="crop()">submit</button></p>
+    <div>
+        <div class="img-preview"></div>
+    </div>
+    <button class="custom-btn btn-16" onclick="crop()">submit</button>
+    <button class="custom-btn btn-16" id="btnLarge">zoomIn</button>
+    <button class="custom-btn btn-16" id="btnSmall">zoomOut</button>
+    <button class="custom-btn btn-16" id="btnScale">rotate</button>
+    <button class="custom-btn btn-16" id="btnInit">reset</button>
 </div>
 
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/cropper/3.1.3/cropper.min.js"></script>
 <script>
-    
+
     var initCropper = function (img, input){
         var $image = img;
         var options = {
             aspectRatio: 5 / 5,
             dragMode: 'move',
             viewMode: 2,
-            cropBoxResizable: false,
+            cropBoxResizable: true,
             preview: '.img-preview'
         };
         $image.cropper(options);
@@ -77,6 +170,19 @@
             $inputImage.prop('disabled', true).addClass('disabled');
         }
     };
+//判断图片是否存在
+var CheckImgExists = function (imgurl) {
+    var ImgObj = new Image(); //判断图片是否存在  
+    ImgObj.src = imgurl;  
+    //存在图片
+    if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {  
+         console.log('图片地址有效')
+         return true;
+    } else {
+         console.log('图片地址无效')  
+         return false;
+     }   
+}
     var crop = function(){
         var $image = $('#photo');
         var $target = $('#selectImg');
@@ -88,7 +194,7 @@
             $("#cropperBox").slideUp();
             $("#selectImg").show();
             $target.attr('src', URL.createObjectURL(blob));    // 将裁剪后的图片放到指定标签
-            var formData = new FormData();      // 将裁剪后的图片上传到服务器
+            var formData = new FormData();
             formData.append('croppedImage', blob);
         });
     };
@@ -100,15 +206,116 @@
             height:500
         }).toDataURL('image/jpeg');
         var resultLink = document.createElement("a");
-        resultLink.download = "for_ubisoft_avtar";
+        resultLink.download = "avatar";
         resultLink.href = url;
         document.body.appendChild(resultLink);
         resultLink.click();
         resultLink.remove();
     }
-    $(function(){
+
+    window.addEventListener('beforeunload', (event) => {
+        // Cancel the event as stated by the standard.
+        event.preventDefault();
+        // Chrome requires returnValue to be set.
+        event.returnValue = '';
+      });
+
+$(function(){
+    var preview = document.getElementById('selectImg');
+    if (!CheckImgExists(preview.src)) {
         initCropper($('#photo'),$('#imgInp'));
-    });
+    }
+});
+
+
+    // 放大
+$("#btnLarge").on("click",function () {
+	$('#photo').cropper("zoom",0.1);
+});
+
+// 缩小
+$("#btnSmall").on("click",function () {
+	$('#photo').cropper("zoom",-0.1);
+});
+
+var flagX = true;
+$("#btnScale").on("click",function () {
+    if(flagX){
+        $('#photo').cropper("scaleX", -1);
+        flagX = false;
+    }else{
+        $('#photo').cropper("scaleX", 1);
+        flagX = true;
+    }
+    flagX != flagX;
+});
+$("#btnInit").on("click",function () {
+    $('#photo').cropper("reset");
+});
+
+readAsDataURL = function(file,result){
+    if(typeof FileReader=='undifined')          //判断浏览器是否支持filereader
+    {
+        result.innerHTML="<p>抱歉，你的浏览器不支持 FileReader</p>";
+        return false;
+    }
+    var file=file.files[0];
+    if(!/image\/\w+/.test(file.type))           //判断获取的是否为图片文件
+    {
+        alert("请确保文件为图像文件");
+        return false;
+    }
+    var reader=new FileReader();
+    reader.readAsDataURL(file);
+    return reader;
+}
+
+// 拷贝cls内的text 放到 创建的textarea并select后删除
+copyContentH5 = function(cls) {
+    var dom = document.querySelector(cls) // 要复制文字的节点
+    console.log(dom);
+    var input = document.createElement("textarea");
+    document.body.appendChild(input);
+    input.innerText=dom.innerText;
+    if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) { // 区分ios设备
+      window.getSelection().removeAllRanges() // 这段代码必须放在前面否则无效
+      var range = document.createRange()
+      // 选中需要复制的节点
+      range.selectNode(input)
+      // 执行选中元素
+      window.getSelection().addRange(range)
+      // 执行 copy 操作
+      var successful = document.execCommand('copy')
+      // 移除选中的元素
+      window.getSelection().removeAllRanges()
+      console.log('复制成功')
+    } else { 
+        //非ios设备
+        input.select() // 选择对象
+      if(document.execCommand('Copy',false,null)){
+          console.log("复制成功")
+      } // 执行浏览器复制命令
+    }
+    input.remove();
+  }
+
+ copyandshow = function(){
+        var tempcrop = $('#photo').cropper('getCroppedCanvas',{
+            width:500,
+            height:500
+        });
+        var data = tempcrop.toDataURL('image/jpeg');
+        var input = document.createElement("textarea");
+        input.id="copyarea"
+        input.classList.add("textarea_color")
+        var imgnode = document.getElementById("btnCopy");
+        imgnode.after(input);
+        input.innerText=data;
+        console.log(input)
+        copyContentH5("#copyarea");
+ }
+
+
 </script>
 </body>
 </html>

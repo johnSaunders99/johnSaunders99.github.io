@@ -37,9 +37,10 @@
 	
 	
 	</style>
-    <title>图片上传</title>
+    <title>图片裁剪</title>
 </head>
 <body>
+    
     <div style="text-align:center;padding:10px"><input id="img-input" type="file"/></div>
     <div class="pic-cropper">
         <input id="slider" type="range"/>
@@ -47,12 +48,30 @@
         <button id="submit">预览</button>
         <canvas id="result-canvas" width="500" height="500"></canvas>
         <button id="export">确定</button>
+        <h5>base64:</h5> 
+        <div>
+            <button id="origin">查看原图神秘代码</button>
+            
+
+            <button id="showcode">查看神秘代码</button>
+        </div>
+        <table width="500" style="table-layout:fixed;">
+            <tr>
+                <td id="basedata64" style="word-wrap : break-word ;"></td>
+            </tr>
+            <tr>
+                <td id="originData64" style="word-wrap : break-word ;"></td>
+            </tr>
+        </table>
+        <div ></div>
     </div>
 <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
 <script>
 var imgInput = document.getElementById("img-input");
 var submitBtn = document.getElementById("submit");
 var exportBtn = document.getElementById("export");
+var showcodeBtn = $("#showcode");
+var origin = $("#origin");
 var mySlider = document.getElementById("slider");
 var resultCanvas = document.getElementById("result-canvas");
 var resultCxt = resultCanvas.getContext("2d");
@@ -63,11 +82,14 @@ var minFactor = 1; //最小放缩倍数
 var maxFactor = 1; //最大放缩倍数
 var ori = document.getElementById("image-canvas").height;
 var cut = document.getElementById("result-canvas").height;
+var output64 = document.getElementById("basedata64");
+var originOutput64 = document.getElementById("originData64");
 console.log(ori);
 console.log(cut);
 var img = new Image();
 img.setAttribute('crossOrigin', 'anonymous');
-
+showcodeBtn.hide();
+origin.hide();
 // const imgUrl = "https://udi-official-website.oss-cn-shenzhen.aliyuncs.com/0/rc-upload-1584349106386-2";
 
 imgInput.onchange = function() {
@@ -77,6 +99,7 @@ imgInput.onchange = function() {
    resultCanvas.setAttribute('height',cut);
    drawMask();
    getImage(imgUrl);
+   origin.show();
     // var fileReader = new FileReader();
     // fileReader.readAsBinaryString(imgInput.files[0]);
 }
@@ -195,7 +218,7 @@ canvasOriginPosition = function() {
     return({"positionX":positionX,"positionY":positionY});
 }
 
-window.onmousemove = function(e) {
+window.onpointermove = function(e) {
     if(moving) {
         pX=e.clientX - lastmouseX;
         pY=e.clientY - lastmouseY;
@@ -223,8 +246,56 @@ mySlider.oninput = function() {
 
 submitBtn.onclick = function() {
     // console.log("onclick!!",lastImgX,lastImgY);
+    showcodeBtn.show();
     resultCxt.drawImage(img,lastImgX-50,lastImgY-50,img.width*currentFactor,img.height*currentFactor)
 }
+
+
+readAsDataURL = function(file,result){
+    if(typeof FileReader=='undifined')          //判断浏览器是否支持filereader
+    {
+        result.innerHTML="<p>抱歉，你的浏览器不支持 FileReader</p>";
+        return false;
+    }
+    var file=file.files[0];
+    if(!/image\/\w+/.test(file.type))           //判断获取的是否为图片文件
+    {
+        alert("请确保文件为图像文件");
+        return false;
+    }
+    var reader=new FileReader();
+    reader.readAsDataURL(file);
+    return reader;
+}
+
+// 拷贝cls内的text 放到 创建的textarea并select后删除
+copyContentH5 = function(cls) {
+    var dom = document.querySelector(cls) // 要复制文字的节点
+    console.log(dom);
+    var input = document.createElement("textarea");
+    document.body.appendChild(input);
+    input.innerText=dom.innerText;
+    if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) { // 区分ios设备
+      window.getSelection().removeAllRanges() // 这段代码必须放在前面否则无效
+      var range = document.createRange()
+      // 选中需要复制的节点
+      range.selectNode(input)
+      // 执行选中元素
+      window.getSelection().addRange(range)
+      // 执行 copy 操作
+      var successful = document.execCommand('copy')
+      // 移除选中的元素
+      window.getSelection().removeAllRanges()
+      console.log('复制成功')
+    } else { 
+        //非ios设备
+        input.select() // 选择对象
+      if(document.execCommand('Copy',false,null)){
+          console.log("复制成功")
+      } // 执行浏览器复制命令
+    }
+    input.remove();
+  }
 
 //下载图片
 exportBtn.onclick = function() {
@@ -237,7 +308,19 @@ exportBtn.onclick = function() {
     resultLink.remove();
 }
 
+showcodeBtn.on("click",function () {
+        output64.innerHTML=resultCanvas.toDataURL('image/png', 1.0);
+        copyContentH5("#basedata64")
+});
 
+origin.on("click",function () {
+    var reader = readAsDataURL(imgInput,originOutput64);
+    reader.onload=function(e)
+    {
+        originOutput64.innerHTML=this.result
+        copyContentH5("#originData64")
+    }
+});
 
 </script>
 </body>
