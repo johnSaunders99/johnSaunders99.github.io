@@ -1,16 +1,15 @@
 {
-  "_from": "live2d-widget-model-hijiki",
-  "_id": "live2d-widget-model-hijiki@1.0.5",
+  "_from": "Terisa_live2D",
+  "_id": "Terisa_live2D@0.0.1",
   "_inBundle": false,
-  "_integrity": "sha1-wt3GsjgL4RuLi8LfDYL9bfoAfxE=",
-  "_location": "/live2d-widget-model-hijiki",
+  "_location": "/Terisa_live2D",
   "_phantomChildren": {},
   "_requested": {
     "type": "tag",
     "registry": true,
-    "raw": "live2d-widget-model-hijiki",
-    "name": "live2d-widget-model-hijiki",
-    "escapedName": "live2d-widget-model-hijiki",
+    "raw": "Terisa_live2D",
+    "name": "Terisa_live2D",
+    "escapedName": "Terisa_live2D",
     "rawSpec": "",
     "saveSpec": null,
     "fetchSpec": "latest"
@@ -21,8 +20,8 @@
   ],
   "_resolved": "https://registry.npm.taobao.org/live2d-widget-model-hijiki/download/live2d-widget-model-hijiki-1.0.5.tgz",
   "_shasum": "c2ddc6b2380be11b8b8bc2df0d82fd6dfa007f11",
-  "_spec": "live2d-widget-model-hijiki",
-  "_where": "D:\\Blog",
+  "_spec": "Terisa_live2D",
+  "_where": "D:\\Blog\\Blog",
   "bugs": {
     "url": "https://github.com/xiazeyu/live2d-widget-models/issues"
   },
