@@ -115,7 +115,7 @@
 
 <div id="cropperBox" class="frame">
     <!--裁剪部分-->
-    <div>
+    <div style="max-height: 700px">
         <img src="" id="photo">
     </div>
     <!--预览-->
@@ -140,7 +140,7 @@
             dragMode: 'move',
             viewMode: 2,
             cropBoxResizable: true,
-            preview: '.img-preview'
+            preview: '.img-preview',
         };
         $image.cropper(options);
         var $inputImage = input;
@@ -156,23 +156,43 @@
                 }
                 if (files && files.length) {
                     file = files[0];
+                    console.log(file)
                     if (/^image\/\w+$/.test(file.type)) {   // 判断是否是图像文件
                         if (uploadedImageURL) {   // 如果URL已存在就先释放
                             URL.revokeObjectURL(uploadedImageURL);
                         }
                         uploadedImageURL = URL.createObjectURL(file);
+
                         // 销毁cropper后更改src属性再重新创建cropper
                         $image.cropper('destroy').attr('src', uploadedImageURL).cropper(options);
+                        console.log(options)
                         $inputImage.val('');
                     } else {
                         window.alert('请选择一个图像文件！');
                     }
                 }
-            });
+            }
+            );
         } else {
             $inputImage.prop('disabled', true).addClass('disabled');
         }
     };
+
+
+// 获取图片真实高度
+var getImageWidth = function(url,callback){
+    var img = new Image();
+    img.src = url;
+    // 如果图片被缓存，则直接返回缓存数据
+    if(img.complete){
+        callback(img.width, img.height);
+    }else{
+        img.onload = function(){
+            callback(img.width, img.height);
+        }
+    }
+}
+
 //判断图片是否存在
 var CheckImgExists = function (imgurl) {
     var ImgObj = new Image(); //判断图片是否存在  
@@ -191,7 +211,9 @@ var CheckImgExists = function (imgurl) {
         var $target = $('#selectImg');
         $image.cropper('getCroppedCanvas',{
             width:500,
-            height:500
+            height:500,
+            imageSmoothingEnabled: false,
+            imageSmoothingQuality: 'high'
         })        .toBlob(function(blob){
             $("#form").show();
             $("#cropperBox").slideUp();
@@ -206,7 +228,9 @@ var CheckImgExists = function (imgurl) {
         var $target = $('#selectImg');
         var url = $image.cropper('getCroppedCanvas',{
             width:500,
-            height:500
+            height:500,
+            imageSmoothingEnabled: false,
+            imageSmoothingQuality: 'high'
         }).toDataURL('image/jpeg');
         var resultLink = document.createElement("a");
         resultLink.download = "avatar";
@@ -305,9 +329,11 @@ copyContentH5 = function(cls) {
  copyandshow = function(){
         var tempcrop = $('#photo').cropper('getCroppedCanvas',{
             width:500,
-            height:500
+            height:500,
+            imageSmoothingEnabled: false,
+            imageSmoothingQuality: 'high'
         });
-        var data = tempcrop.toDataURL('image/jpeg');
+        var data = tempcrop.toDataURL('image/jpeg');;
         var input = document.createElement("textarea");
         input.id="copyarea"
         input.classList.add("textarea_color")
