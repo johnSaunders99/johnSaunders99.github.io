@@ -138,7 +138,7 @@
         var options = {
             aspectRatio: 5 / 5,
             dragMode: 'move',
-            viewMode: 2,
+            viewMode: 1,
             cropBoxResizable: true,
             preview: '.img-preview',
         };
@@ -210,8 +210,6 @@ var CheckImgExists = function (imgurl) {
         var $image = $('#photo');
         var $target = $('#selectImg');
         $image.cropper('getCroppedCanvas',{
-            width:500,
-            height:500,
             imageSmoothingEnabled: false,
             imageSmoothingQuality: 'high'
         })        .toBlob(function(blob){
@@ -221,17 +219,15 @@ var CheckImgExists = function (imgurl) {
             $target.attr('src', URL.createObjectURL(blob));    // 将裁剪后的图片放到指定标签
             var formData = new FormData();
             formData.append('croppedImage', blob);
-        });
+        },'image/jpeg',1.0);
     };
     var download = function(){
         var $image = $('#photo');
         var $target = $('#selectImg');
         var url = $image.cropper('getCroppedCanvas',{
-            width:500,
-            height:500,
             imageSmoothingEnabled: false,
             imageSmoothingQuality: 'high'
-        }).toDataURL('image/jpeg');
+        }).toDataURL('image/jpeg',1.0);
         var resultLink = document.createElement("a");
         resultLink.download = "avatar";
         resultLink.href = url;
@@ -328,12 +324,10 @@ copyContentH5 = function(cls) {
 
  copyandshow = function(){
         var tempcrop = $('#photo').cropper('getCroppedCanvas',{
-            width:500,
-            height:500,
             imageSmoothingEnabled: false,
             imageSmoothingQuality: 'high'
         });
-        var data = tempcrop.toDataURL('image/jpeg');;
+        var data = tempcrop.toDataURL('image/jpeg',1.0);;
         var input = document.createElement("textarea");
         input.id="copyarea"
         input.classList.add("textarea_color")
