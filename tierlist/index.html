@@ -1,72 +1,63 @@
 <!doctype html>
-<html lang="zh">
+<html lang="zh-Hans">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>Tier List 排序 - Genius'Neighbor</title>
-  <link rel="stylesheet" href="/css/cyberpunk.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>强度排行表</title>
   <link rel="stylesheet" href="/css/tierlist.css">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body class="tierlist-page">
-  <nav class="tl-navbar">
-    <a href="/" class="tl-brand">Genius'Neighbor</a>
-    <span class="tl-divider">•</span>
-    <span class="tl-page-title">Tier List 排序</span>
-  </nav>
+  <header class="tl-topbar">
+    <a class="tl-back" href="/">返回首页</a>
+    <div class="tl-title-edit">
+      <label for="list-title">排行表名称</label>
+      <input id="list-title" type="text" value="我的强度排行" aria-label="排行表名称">
+    </div>
+    <div class="tl-actions">
+      <button id="export-btn" class="primary">导出图片</button>
+      <button id="reset-btn" class="ghost">重置表格</button>
+    </div>
+  </header>
 
-  <main class="tl-wrapper">
-    <header class="tl-header">
-      <h1>Tier List 排序</h1>
-      <p>上传多张图片，拖拽到 S - E 的 tier 列表中，并为放入 tier 的图片添加标签。</p>
-    </header>
-
-    <section class="tl-section">
-      <h2>上传图片</h2>
-      <div class="upload-row">
+  <main class="tl-layout">
+    <section class="pool-card">
+      <div class="pool-header">
+        <h2>素材池</h2>
         <label class="upload-btn">
-          <span>选择图片</span>
-          <input id="image-input" type="file" accept="image/*" multiple>
+          <span>上传图片</span>
+          <input id="file-input" type="file" accept="image/*" multiple>
         </label>
-        <button id="clear-pool" class="secondary">清空上传</button>
       </div>
-      <p class="upload-hint">支持一次上传多张图片，可在下方删除单张或全部清空。</p>
-      <div id="image-pool" class="image-pool" aria-label="上传后的图片列表"></div>
+      <p class="muted">支持批量上传，拖拽图片到对应段位，或点击卡片右上角删除。</p>
+      <div id="pool" class="card-grid" aria-label="图片素材池"></div>
     </section>
 
-    <section class="tl-section">
-      <div class="tier-section-header">
-        <div>
-          <h2>Tier 列表</h2>
-          <p class="upload-hint">拖拽图片到对应的 tier。放入后可在卡片上添加标签或移除。</p>
-        </div>
-        <button id="export-tierlist" class="export-btn">导出为图片</button>
+    <section class="board" id="board" aria-label="强度排行表">
+      <div class="board-title" id="board-title">我的强度排行</div>
+      <div class="tier-row" data-tier="S" style="--tier-color:#ff4d6d">
+        <div class="tier-label">S</div>
+        <div class="tier-drop" data-tier="S"></div>
       </div>
-      <div class="tier-board" id="tier-board">
-        <div class="tier-column" data-tier="S">
-          <div class="tier-label tier-s">S</div>
-          <div class="tier-dropzone" data-tier="S" aria-label="S tier dropzone"></div>
-        </div>
-        <div class="tier-column" data-tier="A">
-          <div class="tier-label tier-a">A</div>
-          <div class="tier-dropzone" data-tier="A" aria-label="A tier dropzone"></div>
-        </div>
-        <div class="tier-column" data-tier="B">
-          <div class="tier-label tier-b">B</div>
-          <div class="tier-dropzone" data-tier="B" aria-label="B tier dropzone"></div>
-        </div>
-        <div class="tier-column" data-tier="C">
-          <div class="tier-label tier-c">C</div>
-          <div class="tier-dropzone" data-tier="C" aria-label="C tier dropzone"></div>
-        </div>
-        <div class="tier-column" data-tier="D">
-          <div class="tier-label tier-d">D</div>
-          <div class="tier-dropzone" data-tier="D" aria-label="D tier dropzone"></div>
-        </div>
-        <div class="tier-column" data-tier="E">
-          <div class="tier-label tier-e">E</div>
-          <div class="tier-dropzone" data-tier="E" aria-label="E tier dropzone"></div>
-        </div>
+      <div class="tier-row" data-tier="A" style="--tier-color:#ff9f1c">
+        <div class="tier-label">A</div>
+        <div class="tier-drop" data-tier="A"></div>
+      </div>
+      <div class="tier-row" data-tier="B" style="--tier-color:#ffd166">
+        <div class="tier-label">B</div>
+        <div class="tier-drop" data-tier="B"></div>
+      </div>
+      <div class="tier-row" data-tier="C" style="--tier-color:#06d6a0">
+        <div class="tier-label">C</div>
+        <div class="tier-drop" data-tier="C"></div>
+      </div>
+      <div class="tier-row" data-tier="D" style="--tier-color:#118ab2">
+        <div class="tier-label">D</div>
+        <div class="tier-drop" data-tier="D"></div>
+      </div>
+      <div class="tier-row" data-tier="E" style="--tier-color:#7369ff">
+        <div class="tier-label">E</div>
+        <div class="tier-drop" data-tier="E"></div>
       </div>
     </section>
   </main>
