@@ -90,17 +90,36 @@
     boardTitle.textContent = titleInput.value.trim() || '段位评价图';
   }
 
-  function exportNode(node, name) {
-    const options = {
-      backgroundColor: '#0a0f1f',
-      scale: 2
-    };
-    html2canvas(node, options).then(canvas => {
-      const link = document.createElement('a');
-      link.download = `${name}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+  function ensureHtml2Canvas() {
+    return new Promise((resolve, reject) => {
+      if (window.html2canvas) {
+        return resolve(window.html2canvas);
+      }
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+      script.onload = () => resolve(window.html2canvas);
+      script.onerror = () => reject(new Error('html2canvas load failed'));
+      document.head.appendChild(script);
     });
+  }
+
+  function exportNode(node, name) {
+    ensureHtml2Canvas()
+      .then(() => {
+        const options = {
+          backgroundColor: '#0a0f1f',
+          scale: 2
+        };
+        html2canvas(node, options).then(canvas => {
+          const link = document.createElement('a');
+          link.download = `${name}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        });
+      })
+      .catch(() => {
+        alert('导出功能加载失败，请检查网络后重试');
+      });
   }
 
   function setupTierExports() {
@@ -109,14 +128,7 @@
         const tier = btn.dataset.tier;
         const block = document.querySelector(`.tier-block[data-tier="${tier}"]`);
         if (block) {
-          const clone = block.cloneNode(true);
-          clone.querySelectorAll('.export-tier').forEach(btn => btn.remove());
-          clone.querySelectorAll('textarea').forEach(area => {
-            const text = document.createElement('div');
-            text.className = 'note-readonly';
-            text.textContent = area.value;
-            area.replaceWith(text);
-          });
+          const clone = buildSnapshotBlock(block);
           const wrapper = document.createElement('div');
           wrapper.style.padding = '16px';
           wrapper.style.background = '#0a0f1f';
@@ -130,6 +142,19 @@
     });
   }
 
+  function buildSnapshotBlock(block) {
+    const clone = block.cloneNode(true);
+    const sourceTextareas = Array.from(block.querySelectorAll('textarea'));
+    clone.querySelectorAll('.export-tier').forEach(btn => btn.remove());
+    clone.querySelectorAll('textarea').forEach((area, idx) => {
+      const text = document.createElement('div');
+      text.className = 'note-readonly';
+      text.textContent = sourceTextareas[idx] ? sourceTextareas[idx].value : '';
+      area.replaceWith(text);
+    });
+    return clone;
+  }
+
   fileInput.addEventListener('change', e => handleFiles(e.target.files));
   resetBtn.addEventListener('click', clearAll);
   exportAllBtn.addEventListener('click', () => {
@@ -141,15 +166,7 @@
     title.textContent = boardTitle.textContent;
     wrapper.appendChild(title);
     document.querySelectorAll('.tier-block').forEach(block => {
-      const clone = block.cloneNode(true);
-      clone.querySelectorAll('.export-tier').forEach(btn => btn.remove());
-      clone.querySelectorAll('textarea').forEach(area => {
-        const text = document.createElement('div');
-        text.className = 'note-readonly';
-        text.textContent = area.value;
-        area.replaceWith(text);
-      });
-      wrapper.appendChild(clone);
+      wrapper.appendChild(buildSnapshotBlock(block));
     });
     exportNode(wrapper, `${boardTitle.textContent}-全部段位评价`);
   });
