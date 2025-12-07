@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>强度评价记录</title>
+  <link rel="stylesheet" href="/css/tier-notes.css">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body class="tier-notes-page">
+  <header class="tn-topbar">
+    <a class="tn-back" href="/">返回首页</a>
+    <div class="tn-title-edit">
+      <label for="board-title-input">表名</label>
+      <input id="board-title-input" type="text" value="强度评价表" aria-label="表名">
+    </div>
+    <div class="tn-actions">
+      <label class="upload-btn">
+        <span>上传图片</span>
+        <input id="file-input" type="file" accept="image/*" multiple>
+      </label>
+      <button id="reset-btn" class="ghost">重置</button>
+      <button id="export-btn" class="primary">导出图片</button>
+    </div>
+  </header>
+
+  <main class="tn-layout">
+    <section class="tn-pool">
+      <div class="tn-panel-header">
+        <h2>素材池</h2>
+        <p class="muted">批量上传，拖拽卡片到段位，点击×可删除。</p>
+      </div>
+      <div id="pool" class="card-grid" aria-label="图片素材池"></div>
+    </section>
+
+    <section class="tn-board" id="board" aria-label="评价表">
+      <div id="board-title" class="board-title">强度评价表</div>
+      <div class="tier-row" data-tier="S" style="--tier-color:#ff4d6d">
+        <div class="tier-label">S</div>
+        <div class="tier-drop" data-tier="S"></div>
+      </div>
+      <div class="tier-row" data-tier="A" style="--tier-color:#ff9f1c">
+        <div class="tier-label">A</div>
+        <div class="tier-drop" data-tier="A"></div>
+      </div>
+      <div class="tier-row" data-tier="B" style="--tier-color:#ffd166">
+        <div class="tier-label">B</div>
+        <div class="tier-drop" data-tier="B"></div>
+      </div>
+      <div class="tier-row" data-tier="C" style="--tier-color:#06d6a0">
+        <div class="tier-label">C</div>
+        <div class="tier-drop" data-tier="C"></div>
+      </div>
+      <div class="tier-row" data-tier="D" style="--tier-color:#118ab2">
+        <div class="tier-label">D</div>
+        <div class="tier-drop" data-tier="D"></div>
+      </div>
+      <div class="tier-row" data-tier="E" style="--tier-color:#7369ff">
+        <div class="tier-label">E</div>
+        <div class="tier-drop" data-tier="E"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/tier-notes.js"></script>
+</body>
+</html>
