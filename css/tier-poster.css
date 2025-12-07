@@ -1,0 +1,279 @@
+:root {
+  --bg: #0a0f1f;
+  --panel: #0f172a;
+  --border: #1b2848;
+  --text: #eaf0ff;
+  --muted: #9fb4d7;
+  --card: #0d1426;
+  --primary: #7c5dff;
+  --accent: #22d3ee;
+}
+
+* { box-sizing: border-box; }
+
+body.tier-poster-page {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, rgba(124,93,255,0.08), transparent 38%),
+              radial-gradient(circle at 80% 0%, rgba(34,211,238,0.05), transparent 32%),
+              var(--bg);
+  color: var(--text);
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+a { color: inherit; }
+
+.tp-topbar {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(10, 15, 31, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tp-back { text-decoration: none; color: var(--muted); font-weight: 700; }
+
+.tp-title-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.tp-title-edit label { color: var(--muted); }
+
+.tp-title-edit input {
+  flex: 1;
+  max-width: 360px;
+  padding: 0.6rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #0b1323;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.tp-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+button, .upload-btn {
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 10px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+button:disabled { opacity: 0.65; cursor: not-allowed; }
+
+button.primary {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #0b0f1e;
+  padding: 0.65rem 1.1rem;
+  box-shadow: 0 10px 30px rgba(124,93,255,0.2);
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.55rem 1rem;
+}
+
+button.small {
+  padding: 0.35rem 0.55rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.upload-btn {
+  background: linear-gradient(135deg, #1e293b, #11182d);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px dashed var(--border);
+}
+
+.upload-btn input { display: none; }
+
+button:hover, .upload-btn:hover { transform: translateY(-1px); }
+button:active, .upload-btn:active { transform: translateY(0); }
+
+.tp-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem 2rem;
+}
+
+.tp-panel {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+.pool-header, .poster-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.muted { color: var(--muted); font-size: 0.93rem; margin: 0 0 0.5rem; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+  min-height: 120px;
+}
+
+.poster-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 140px 1fr auto;
+  transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+.poster-card.dragging { opacity: 0.6; transform: scale(0.98); }
+
+.poster-card .thumb {
+  background-size: cover;
+  background-position: center;
+}
+
+.poster-card textarea {
+  background: #0b1323;
+  color: var(--text);
+  border: none;
+  padding: 0.65rem;
+  resize: vertical;
+  min-height: 90px;
+  border-top: 1px solid var(--border);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.note-readonly {
+  background: #0b1323;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  white-space: pre-wrap;
+  min-height: 90px;
+  line-height: 1.4;
+}
+
+.poster-card .card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.35rem 0.5rem 0.45rem;
+  gap: 0.35rem;
+  border-top: 1px solid var(--border);
+}
+
+.poster-card button.remove {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.poster-card button.remove:hover { color: #ff6b6b; border-color: #ff6b6b; }
+
+.tier-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.tier-block.single {
+  min-height: 520px;
+}
+
+.tier-block {
+  position: relative;
+  padding: 0.85rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: linear-gradient(145deg, rgba(15,23,42,0.9), rgba(11,18,35,0.9));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 50px rgba(0,0,0,0.35);
+}
+
+.tier-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tier-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+}
+
+.tier-label .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tier-canvas {
+  min-height: 180px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+  background: rgba(12, 18, 36, 0.65);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tier-canvas.drag-over {
+  border-color: var(--primary);
+  background: rgba(124, 93, 255, 0.05);
+}
+
+.poster-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  font-weight: 800;
+}
+
+.board-title { color: var(--muted); font-weight: 700; }
+
+@media (max-width: 1100px) {
+  .tp-layout { grid-template-columns: 1fr; }
+  .tp-topbar { grid-template-columns: 1fr; }
+  .tp-title-edit { justify-content: flex-start; }
+  .tp-actions { justify-content: flex-start; flex-wrap: wrap; }
+}
