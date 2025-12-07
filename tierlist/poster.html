@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>段位评价图片制作</title>
+  <link rel="stylesheet" href="/css/tier-poster.css">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body class="tier-poster-page">
+  <header class="tp-topbar">
+    <a class="tp-back" href="/">返回首页</a>
+    <div class="tp-title-edit">
+      <label for="board-title-input">表名</label>
+      <input id="board-title-input" type="text" value="段位评价图" aria-label="表名">
+    </div>
+    <div class="tp-actions">
+      <label class="upload-btn">
+        <span>上传图片</span>
+        <input id="file-input" type="file" accept="image/*" multiple>
+      </label>
+      <button id="reset-btn" class="ghost">清空卡片</button>
+      <button id="export-all-btn" class="primary">导出全部段位</button>
+    </div>
+  </header>
+
+  <main class="tp-layout">
+    <section class="tp-panel">
+      <div class="pool-header">
+        <h2>素材池</h2>
+        <span class="muted">批量上传，写好评价后拖到对应段位</span>
+      </div>
+      <div id="pool" class="card-grid" aria-label="图片素材池"></div>
+    </section>
+
+    <section class="tp-panel">
+      <div class="poster-header">
+        <div class="poster-title" id="board-title">段位评价图</div>
+        <div class="board-title">每个段位单独导出一张图片</div>
+      </div>
+      <div class="tier-stack">
+        <div class="tier-block" data-tier="S">
+          <div class="tier-heading">
+            <div class="tier-label"><span class="dot" style="background:#ff4d6d"></span>S Tier</div>
+            <button class="small primary export-tier" data-tier="S">导出 S 段图片</button>
+          </div>
+          <div class="tier-canvas" data-tier="S"></div>
+        </div>
+        <div class="tier-block" data-tier="A">
+          <div class="tier-heading">
+            <div class="tier-label"><span class="dot" style="background:#ff9f1c"></span>A Tier</div>
+            <button class="small primary export-tier" data-tier="A">导出 A 段图片</button>
+          </div>
+          <div class="tier-canvas" data-tier="A"></div>
+        </div>
+        <div class="tier-block" data-tier="B">
+          <div class="tier-heading">
+            <div class="tier-label"><span class="dot" style="background:#ffd166"></span>B Tier</div>
+            <button class="small primary export-tier" data-tier="B">导出 B 段图片</button>
+          </div>
+          <div class="tier-canvas" data-tier="B"></div>
+        </div>
+        <div class="tier-block" data-tier="C">
+          <div class="tier-heading">
+            <div class="tier-label"><span class="dot" style="background:#06d6a0"></span>C Tier</div>
+            <button class="small primary export-tier" data-tier="C">导出 C 段图片</button>
+          </div>
+          <div class="tier-canvas" data-tier="C"></div>
+        </div>
+        <div class="tier-block" data-tier="D">
+          <div class="tier-heading">
+            <div class="tier-label"><span class="dot" style="background:#118ab2"></span>D Tier</div>
+            <button class="small primary export-tier" data-tier="D">导出 D 段图片</button>
+          </div>
+          <div class="tier-canvas" data-tier="D"></div>
+        </div>
+        <div class="tier-block" data-tier="E">
+          <div class="tier-heading">
+            <div class="tier-label"><span class="dot" style="background:#7369ff"></span>E Tier</div>
+            <button class="small primary export-tier" data-tier="E">导出 E 段图片</button>
+          </div>
+          <div class="tier-canvas" data-tier="E"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/tier-poster.js"></script>
+</body>
+</html>
