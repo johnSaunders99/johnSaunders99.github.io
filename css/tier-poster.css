@@ -236,6 +236,7 @@ button:active, .upload-btn:active { transform: translateY(0); }
   border-radius: 12px;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--border);
+  cursor: text;
 }
 
 .tier-label .dot {

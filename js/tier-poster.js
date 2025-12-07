@@ -6,6 +6,8 @@
   const exportBtn = document.getElementById('export-btn');
   const titleInput = document.getElementById('board-title-input');
   const boardTitle = document.getElementById('board-title');
+  const tierLabel = document.getElementById('tier-label');
+  const tierLabelText = document.getElementById('tier-label-text');
   const tierBlock = document.querySelector('.tier-block.single');
 
   let idCounter = 0;
@@ -90,6 +92,15 @@
     boardTitle.textContent = titleInput.value.trim() || '段位评价图';
   }
 
+  function syncTierLabel() {
+    const text = (tierLabelText.textContent || '').trim();
+    const value = text || '自定义段位';
+    if (value !== tierLabelText.textContent) {
+      tierLabelText.textContent = value;
+    }
+    return value;
+  }
+
   function ensureHtml2Canvas() {
     return new Promise((resolve, reject) => {
       if (window.html2canvas) {
@@ -144,6 +155,7 @@
   fileInput.addEventListener('change', e => handleFiles(e.target.files));
   resetBtn.addEventListener('click', clearAll);
   exportBtn.addEventListener('click', () => {
+    const tierName = syncTierLabel();
     const wrapper = document.createElement('div');
     wrapper.style.padding = '16px';
     wrapper.style.background = '#0a0f1f';
@@ -158,11 +170,19 @@
     wrapper.appendChild(buildSnapshotBlock(tierBlock));
 
     document.body.appendChild(wrapper);
-    exportNode(wrapper, `${boardTitle.textContent}-评价`, () => wrapper.remove());
+    exportNode(wrapper, `${boardTitle.textContent}-${tierName}-评价`, () => wrapper.remove());
   });
 
   titleInput.addEventListener('input', syncTitle);
+  tierLabelText.addEventListener('blur', syncTierLabel);
+  tierLabelText.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      tierLabelText.blur();
+    }
+  });
   syncTitle();
+  syncTierLabel();
 
   pool.addEventListener('dragover', e => e.preventDefault());
   pool.addEventListener('drop', e => {
