@@ -103,22 +103,28 @@
     });
   }
 
-  function exportNode(node, name) {
+  function exportNode(node, name, cleanup) {
     ensureHtml2Canvas()
-      .then(() => {
+      .then((h2c) => {
         const options = {
           backgroundColor: '#0a0f1f',
           scale: 2
         };
-        html2canvas(node, options).then(canvas => {
-          const link = document.createElement('a');
-          link.download = `${name}.png`;
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-        });
+        return h2c(node, options);
+      })
+      .then(canvas => {
+        const link = document.createElement('a');
+        link.download = `${name}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
       })
       .catch(() => {
         alert('导出功能加载失败，请检查网络后重试');
+      })
+      .finally(() => {
+        if (typeof cleanup === 'function') {
+          cleanup();
+        }
       });
   }
 
@@ -141,12 +147,18 @@
     const wrapper = document.createElement('div');
     wrapper.style.padding = '16px';
     wrapper.style.background = '#0a0f1f';
+    wrapper.style.position = 'absolute';
+    wrapper.style.left = '-9999px';
+    wrapper.style.top = '0';
+
     const title = document.createElement('div');
     title.className = 'poster-title';
     title.textContent = boardTitle.textContent;
     wrapper.appendChild(title);
     wrapper.appendChild(buildSnapshotBlock(tierBlock));
-    exportNode(wrapper, `${boardTitle.textContent}-评价`);
+
+    document.body.appendChild(wrapper);
+    exportNode(wrapper, `${boardTitle.textContent}-评价`, () => wrapper.remove());
   });
 
   titleInput.addEventListener('input', syncTitle);
