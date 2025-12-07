@@ -19,11 +19,7 @@
 
     const img = document.createElement('img');
     img.src = src;
-    img.alt = name;
-
-    const caption = document.createElement('div');
-    caption.className = 'name';
-    caption.textContent = name;
+    img.alt = name || '图片';
 
     const removeBtn = document.createElement('button');
     removeBtn.className = 'remove';
@@ -31,7 +27,7 @@
     removeBtn.textContent = '×';
     removeBtn.addEventListener('click', () => removeItem(id));
 
-    card.append(img, caption, removeBtn);
+    card.append(img, removeBtn);
 
     card.addEventListener('dragstart', (e) => {
       card.classList.add('dragging');

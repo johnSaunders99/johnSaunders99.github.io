@@ -159,15 +159,6 @@ button.ghost {
   display: block;
 }
 
-.card .name {
-  padding: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--muted);
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
 .card .remove {
   position: absolute;
   top: 6px;
