@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>段位评价图片制作</title>
+  <link rel="stylesheet" href="/css/tier-poster.css">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body class="tier-poster-page">
+  <header class="tp-topbar">
+    <a class="tp-back" href="/">返回首页</a>
+    <div class="tp-title-edit">
+      <label for="board-title-input">段位标题</label>
+      <input id="board-title-input" type="text" value="S 段位评价" aria-label="段位标题">
+    </div>
+    <div class="tp-actions">
+      <label class="upload-btn">
+        <span>上传图片</span>
+        <input id="file-input" type="file" accept="image/*" multiple>
+      </label>
+      <button id="reset-btn" class="ghost">清空卡片</button>
+      <button id="export-btn" class="primary">导出当前图片</button>
+    </div>
+  </header>
+
+  <main class="tp-layout">
+    <section class="tp-panel">
+      <div class="pool-header">
+        <h2>素材池</h2>
+        <span class="muted">批量上传，写好评价后拖到对应段位</span>
+      </div>
+      <div id="pool" class="card-grid" aria-label="图片素材池"></div>
+    </section>
+
+    <section class="tp-panel">
+      <div class="poster-header">
+        <div class="poster-title" id="board-title">S 段位评价</div>
+        <div class="board-title">拖入装备，填写长评，一键导出</div>
+      </div>
+      <div class="tier-block single">
+        <div class="tier-heading">
+          <div class="tier-label" id="tier-label" title="点击修改段位名称">
+            <span class="dot" style="background:#ff4d6d"></span>
+            <span id="tier-label-text" contenteditable="true" spellcheck="false">自定义段位</span>
+          </div>
+        </div>
+        <div id="poster-canvas" class="tier-canvas" aria-label="段位画布"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/tier-poster.js"></script>
+</body>
+</html>
