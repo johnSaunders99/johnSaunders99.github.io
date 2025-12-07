@@ -205,6 +205,10 @@ button:active, .upload-btn:active { transform: translateY(0); }
   gap: 0.8rem;
 }
 
+.tier-block.single {
+  min-height: 520px;
+}
+
 .tier-block {
   position: relative;
   padding: 0.85rem;

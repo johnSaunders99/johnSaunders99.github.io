@@ -1,12 +1,12 @@
 (function() {
   const pool = document.getElementById('pool');
-  const tierCanvases = document.querySelectorAll('.tier-canvas');
+  const posterCanvas = document.getElementById('poster-canvas');
   const fileInput = document.getElementById('file-input');
   const resetBtn = document.getElementById('reset-btn');
-  const exportAllBtn = document.getElementById('export-all-btn');
+  const exportBtn = document.getElementById('export-btn');
   const titleInput = document.getElementById('board-title-input');
   const boardTitle = document.getElementById('board-title');
-  const tierExports = document.querySelectorAll('.export-tier');
+  const tierBlock = document.querySelector('.tier-block.single');
 
   let idCounter = 0;
 
@@ -122,26 +122,6 @@
       });
   }
 
-  function setupTierExports() {
-    tierExports.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tier = btn.dataset.tier;
-        const block = document.querySelector(`.tier-block[data-tier="${tier}"]`);
-        if (block) {
-          const clone = buildSnapshotBlock(block);
-          const wrapper = document.createElement('div');
-          wrapper.style.padding = '16px';
-          wrapper.style.background = '#0a0f1f';
-          const title = document.createElement('div');
-          title.className = 'poster-title';
-          title.textContent = boardTitle.textContent;
-          wrapper.append(title, clone);
-          exportNode(wrapper, `${boardTitle.textContent}-${tier}段位评价`);
-        }
-      });
-    });
-  }
-
   function buildSnapshotBlock(block) {
     const clone = block.cloneNode(true);
     const sourceTextareas = Array.from(block.querySelectorAll('textarea'));
@@ -157,7 +137,7 @@
 
   fileInput.addEventListener('change', e => handleFiles(e.target.files));
   resetBtn.addEventListener('click', clearAll);
-  exportAllBtn.addEventListener('click', () => {
+  exportBtn.addEventListener('click', () => {
     const wrapper = document.createElement('div');
     wrapper.style.padding = '16px';
     wrapper.style.background = '#0a0f1f';
@@ -165,10 +145,8 @@
     title.className = 'poster-title';
     title.textContent = boardTitle.textContent;
     wrapper.appendChild(title);
-    document.querySelectorAll('.tier-block').forEach(block => {
-      wrapper.appendChild(buildSnapshotBlock(block));
-    });
-    exportNode(wrapper, `${boardTitle.textContent}-全部段位评价`);
+    wrapper.appendChild(buildSnapshotBlock(tierBlock));
+    exportNode(wrapper, `${boardTitle.textContent}-评价`);
   });
 
   titleInput.addEventListener('input', syncTitle);
@@ -184,6 +162,5 @@
     }
   });
 
-  tierCanvases.forEach(setupCanvas);
-  setupTierExports();
+  setupCanvas(posterCanvas);
 })();
